@@ -176,7 +176,7 @@ the other bc-d3 graphs.
           .attr("y1", 0)
           .attr("x2", this.width / 2)
           .attr("y2", this.height)
-          .style("stroke-dasharray", ("7, 3"));
+          .style("stroke-dasharray", ("10, 8"));
       },
 
       /**
@@ -295,6 +295,10 @@ the other bc-d3 graphs.
       heightChanged: function() {
         this.log("HEIGHT CHANGED: " + this.height);
         this.updateGraph();
+        if(this.centerline) {
+          this.chartContainer.selectAll(".centerline")
+            .attr("y2", this.height);
+        }
       },
 
       /**
