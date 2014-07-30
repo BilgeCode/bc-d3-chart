@@ -8,3 +8,5 @@ The base component for some d3.js polymer components:
 [bc-d3-datebrush](http://bilgecode.github.io/bc-d3-datebrush)
 
 [bc-d3-areachart](http://bilgecode.github.io/bc-d3-areachart)
+
+[bc-d3-dateline](http://bilgecode.github.io/bc-d3-dateline)
