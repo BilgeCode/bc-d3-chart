@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+:host #chart {
+  border-width: 0px;
+  margin: 0px;
+  padding 0px
+}

@@ -1,0 +1,28 @@
+{
+  "name": "bc-d3-chart",
+  "keywords": [
+    "d3",
+    "chart",
+    "polymer",
+    "web-components"
+  ],
+  "main": "bc-d3-chart.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#0.5.5",
+    "d3": "~3.5"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#2.2.6"
+  },
+  "homepage": "https://github.com/bilgecode/bc-d3-chart",
+  "_release": "40b8f27687",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "40b8f27687cdb122bb3a4b29508d1863c1ea3909"
+  },
+  "_source": "git://github.com/bilgecode/bc-d3-chart.git",
+  "_target": "master",
+  "_originalSource": "bilgecode/bc-d3-chart",
+  "_direct": true
+}

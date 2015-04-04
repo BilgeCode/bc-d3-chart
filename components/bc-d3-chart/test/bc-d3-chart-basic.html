@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bc-d3-chart</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../bc-d3-chart.html">
+  <link rel="import" href="test-extended-element.html">
+
+</head>
+<body>
+
+  <!--
+    Test premises:
+      - test all attribute defaults
+      - test debug logging
+      - test template components exist
+      - test centerline functionality
+      - test domains
+      - test listeners: data, width, height, domain
+  -->
+
+  <test-extended-element
+    id="fixture"
+  ></test-extended-element>
+
+  <script>
+    var myEl = document.getElementById('fixture');
+
+    suite('<bc-d3-chart>', function() {
+
+      test('defines the default properties', function() {
+        assert.equal(myEl.debug, false);
+        assert.equal(myEl.data,  null);
+        assert.equal(myEl.domain,  null);
+        assert.equal(myEl.height,  80);
+        assert.equal(myEl.width,  120);
+        assert.equal(myEl.centerline,  false);
+      });
+
+      test('test debug logging', function() {
+        // Just test to make sure it doesn't throw an error
+        // I haven't figured out how to test that something was written to the
+        // console yet, but this does ensure that it won't break other browsers
+        // IE, I'm looking at you...
+        myEl.log("Are you ready TESTING??");
+      });
+
+      test('confirm template components exist', function() {
+        // confirm that there is an svg element
+        assert.equal(myEl.$.chart.tagName, "svg");
+      });
+
+      test('confirm the centerline exists', function(done) {
+
+        this.timeout(200);
+        console.log("start testing centerline");
+        myEl.createGraph();
+        // confirm it doesn't at first
+        setTimeout(
+          function(){
+            assert.equal(myEl.$.chart.children.length, 1, "centerline doesn't exist yet");
+            myEl.centerline = true;
+          },
+          50);
+        // confirm that it was created
+        setTimeout(
+          function(){
+            assert.equal(myEl.$.chart.children.length, 2, "centerline created");
+            myEl.centerline = false;
+          },
+          100);
+        // confirm that it was removed
+        setTimeout(
+          function(){
+            assert.equal(myEl.$.chart.children.length, 1, "centerline removed");
+            done();
+          },
+          150);
+      });
+
+      test('test domain changes and getXDomain calculation', function() {
+        myEl.domain = [1, 10];
+        assert.sameMembers(myEl.domain, [1, 10]);
+        assert.sameMembers(myEl.getXDomain(), [1, 10]);
+      });
+
+      test('test data changes and all domain calculations', function() {
+
+        myEl.domain = undefined;
+        var newData = [
+          {yVal: 1, xVal: 101},
+          {yVal: 10, xVal: 110}
+        ]
+        myEl.data = newData;
+        assert.sameMembers(myEl.getYDomain(), [1, 10]);
+        assert.sameMembers(myEl.getXDomain(), [101, 110]);
+      });
+
+    });
+  </script>
+
+</body>
+</html>
