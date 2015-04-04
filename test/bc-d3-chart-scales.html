@@ -32,7 +32,7 @@
 
       test('test scales', function(done) {
 
-        this.timeout(50);
+        this.timeout(500);
 
         myEl.height = 100;
         myEl.width = 100;
@@ -54,12 +54,12 @@
             assert.equal(myEl.xScale(110), 100);
             done();
           },
-          40);
+          400);
       });
 
       test('test adjustments to axis widths', function(done) {
 
-        this.timeout(50);
+        this.timeout(500);
 
         myEl.height = 120;
         myEl.width = 120;
@@ -87,7 +87,7 @@
 
             done();
           },
-          40);
+          400);
       });
 
     });

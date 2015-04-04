@@ -58,7 +58,7 @@
 
       test('confirm the centerline exists', function(done) {
 
-        this.timeout(200);
+        this.timeout(1000);
         console.log("start testing centerline");
         myEl.createGraph();
         // confirm it doesn't at first
@@ -67,21 +67,21 @@
             assert.equal(myEl.$.chart.children.length, 1, "centerline doesn't exist yet");
             myEl.centerline = true;
           },
-          50);
+          200);
         // confirm that it was created
         setTimeout(
           function(){
             assert.equal(myEl.$.chart.children.length, 2, "centerline created");
             myEl.centerline = false;
           },
-          100);
+          400);
         // confirm that it was removed
         setTimeout(
           function(){
             assert.equal(myEl.$.chart.children.length, 1, "centerline removed");
             done();
           },
-          150);
+          600);
       });
 
       test('test domain changes and getXDomain calculation', function() {
