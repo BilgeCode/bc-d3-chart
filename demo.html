@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>bc-d3-chart Demo</title>
+    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="my-bc-d3-chart.html">
+    <link rel="import" href="test/test-extended-element.html">
+  </head>
+  <body unresolved>
+    <p>An extended `bc-d3-chart` looks like this:</p>
+
+    <pre>
+      &lt;my-bc-d3-chart
+        data={{data}} domain={{domain}} debug={{debug}}
+        height="{{width}}" width="{{height}}" centerline={{centerline}}
+        &gt;&lt;/my-bc-d3-chart&gt;
+    </pre>
+
+    <div style='background: green;'>
+      <test-extended-element
+        width="100"
+        height="100"
+        id="fixture"
+      ></test-extended-element>
+    </div>
+
+    <template is="auto-binding" id="demo">
+      <my-bc-d3-chart
+        id="demochart" data={{data}} domain={{domain}} debug={{debug}}
+        height="{{width}}" width="{{height}}" centerline={{centerline}}
+        ></my-bc-d3-chart>
+    </template>
+
+    <script>
+      console.log("happening.");
+      var t = document.querySelector('#demo');
+      t.debug = true;
+      t.centerline = true;
+      t.data = [];
+      t.domain = [];
+      t.width = 300;
+      t.height = 300;
+
+      function showHeight() {
+        var c = document.getElementById("demochart");
+        t.width = 400;
+        t.height = 400;
+        // console.log(c.height);
+      }
+    </script>
+    <button type="button" onclick="showHeight()">Height</button>
+  </body>
+</html>

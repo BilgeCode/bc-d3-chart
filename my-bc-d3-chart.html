@@ -1,0 +1,66 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="bc-d3-chart.html">
+
+<!-- a quick example element that extends bc-d3-chart -->
+
+<polymer-element name="my-bc-d3-chart" extends="bc-d3-chart">
+
+  <template>
+    <style>
+    :host {
+      display: block;
+    }
+
+    :host /deep/ .chartContainer {
+      background-color: red;
+      margin: 0px;
+    }
+
+    :host /deep/ .circle {
+      fill: yellow;
+    }
+
+    :host /deep/ .centerline {
+      stroke: green;
+    }
+    </style>
+    <shadow></shadow>
+  </template>
+
+  <script>
+    Polymer('my-bc-d3-chart', {
+
+      clearGraph: function() {
+        this.d3SVGChart.selectAll(".circle").remove();
+      },
+
+      createGraph: function() {
+        this.clearGraph();
+        // set the chart dimensions
+        this.d3SVGChart = d3.select(this.$.chart)
+          .attr("width", this.width)
+          .attr("height", this.height);
+
+        var circle = this.d3SVGChart.append("circle")
+          .attr("cx", this.width / 2)
+          .attr("cy", this.height / 2)
+          .attr("r", this.height / 3)
+          .attr("class", "circle");
+
+        if(this.centerline) {
+          this.drawCenterLine();
+        }
+        this.updateGraph();
+      },
+
+      updateGraph: function() {
+        this.log("Updating Graph.");
+
+        this.d3SVGChart.selectAll(".circle")
+          .attr("cx", this.width / 2)
+          .attr("cy", this.height / 2)
+          .attr("r", this.height / 3);
+      }
+    });
+  </script>
+</polymer-element>

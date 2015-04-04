@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bc-d3-chart</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../bc-d3-chart.html">
+  <link rel="import" href="test-extended-element.html">
+
+</head>
+<body>
+
+  <!--
+    Test premises:
+      - test scales
+      - test axes paddings and display
+  -->
+
+  <test-extended-element
+    id="fixture"
+  ></test-extended-element>
+
+  <script>
+    var myEl = document.getElementById('fixture');
+
+    suite('<bc-d3-chart>', function() {
+
+      test('test scales', function(done) {
+
+        this.timeout(50);
+
+        myEl.height = 100;
+        myEl.width = 100;
+        var newData = [
+          {yVal: 0, xVal: 100},
+          {yVal: 10, xVal: 110}
+        ]
+        myEl.data = newData;
+        myEl.updateScales();
+
+        setTimeout(
+          function(){
+            assert.equal(myEl.yScale(0), 100);
+            assert.equal(myEl.yScale(5), 50);
+            assert.equal(myEl.yScale(10), 0);
+
+            assert.equal(myEl.xScale(100), 0);
+            assert.equal(myEl.xScale(105), 50);
+            assert.equal(myEl.xScale(110), 100);
+            done();
+          },
+          40);
+      });
+
+      test('test adjustments to axis widths', function(done) {
+
+        this.timeout(50);
+
+        myEl.height = 120;
+        myEl.width = 120;
+        myEl.centerline = true;
+        var newData = [
+          {yVal: 0, xVal: 100},
+          {yVal: 10, xVal: 110}
+        ]
+        myEl.data = newData;
+        myEl.yAxisWidth = 20;
+        myEl.xAxisWidth = 20;
+        myEl.updateScales();
+
+        setTimeout(
+          function(){
+            assert.equal(myEl.yScale(0), 100);
+            assert.equal(myEl.yScale(5), 50);
+            assert.equal(myEl.yScale(10), 0);
+
+            assert.equal(myEl.xScale(100), 20);
+            assert.equal(myEl.xScale(105), 70);
+            assert.equal(myEl.xScale(110), 120);
+
+            assert.equal(myEl.$.chart.children[1].attributes.x1.value,  "70");
+
+            done();
+          },
+          40);
+      });
+
+    });
+  </script>
+
+</body>
+</html>

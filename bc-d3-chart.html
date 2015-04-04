@@ -1,41 +1,44 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../bc-d3-base/bc-d3-base.html">
 
 <!--
 bc-d3-chart is not a standalone component. It should be extended to create
 the other bc-d3 graphs.
 
-@todo:
-  - handle "loading" and "error" conditions
-  - tooltips in data
-
 ##### Example
 
-    <bc-d3-chart></bc-d3-chart>
+    <polymer-element name="my-d3-chart" extends="bc-d3-chart">
+      ...
+    </polymer-element>
 
 @element bc-d3-chart
 @blurb Provides an svg element and d3.js. Designed to be extended.
-@status alpha
+@status beta
 @homepage https://github.com/BilgeCode/bc-d3-chart
 -->
 <polymer-element
   name="bc-d3-chart"
-  extends="bc-d3-base"
   attributes="data domain height width debug centerline">
 
-  <template>
+  <script src="../d3/d3.min.js"></script>
 
-    <link rel="stylesheet" href="bc-d3-chart.css" />
+  <template>
+    <link rel="stylesheet" href="bc-d3-chart.css">
 
     <svg id="chart"
       class="chartContainer"
       style="height:{{height}}px;width:{{width}}px;"></svg>
-
   </template>
-
   <script>
+    Polymer({
 
-    Polymer('bc-d3-chart', {
+      /**
+       * The `debug` attribute is just a flag to reflect a debugging mode.
+       *
+       * @attribute debug
+       * @type bool
+       * @default false
+       */
+      debug: false,
 
       /**
        * The `data` attribute is the array of data passed to the chart.
@@ -45,7 +48,6 @@ the other bc-d3 graphs.
        * @type array
        */
       data: null,
-
       /**
        * The `domain` attribute is the data domain to display in the chart.
        *
@@ -53,7 +55,6 @@ the other bc-d3 graphs.
        * @type array
        */
       domain: null,
-
       /**
        * The `height` attribute is the height of the chart in pixels.
        *
@@ -61,7 +62,6 @@ the other bc-d3 graphs.
        * @type int
        */
       height: 80,
-
       /**
        * The `width` attribute is the width of the chart in pixels.
        *
@@ -69,7 +69,6 @@ the other bc-d3 graphs.
        * @type int
        */
       width: 120,
-
       /**
        * The `centerline` attribute is a flag indicating that the chart should
        * have a line drawn down the center
@@ -78,23 +77,20 @@ the other bc-d3 graphs.
        * @type bool
        */
       centerline: false,
-
       /**
        * The `yAxisWidth` is a property used prepare for a y-axis (pixels)
        *
        * @property yAxisWidth
        * @type int
        */
-      yAxisWidth: 25,
-
+      yAxisWidth: 0,
       /**
        * The `xAxisWidth` is a property used prepare for a x-axis (pixels)
        *
        * @property xAxisWidth
        * @type int
        */
-      yAxisWidth: 0,
-
+      xAxisWidth: 0,
       /**
        * The `paddingTop` indicates how many pixels to keep between the chart
        * area and the top boundary of the chart
@@ -103,7 +99,6 @@ the other bc-d3 graphs.
        * @type int
        */
       paddingTop: 0,
-
       /**
        * The `paddingBottom` indicates how many pixels to keep between the chart
        * area and the bottom boundary of the chart
@@ -112,7 +107,6 @@ the other bc-d3 graphs.
        * @type int
        */
       paddingBottom: 0,
-
       /**
        * The `xScale` propety is a d3 scale calculated from the domain and
        * size of the chart
@@ -121,7 +115,6 @@ the other bc-d3 graphs.
        * @type d3.scale
        */
       xScale: null,
-
       /**
        * The `xScale` propety is a d3 scale calculated from the domain and
        * size of the chart
@@ -130,17 +123,18 @@ the other bc-d3 graphs.
        * @type d3.scale
        */
       yScale: null,
-
       /**
-       * The `chartContainer` provides access to the chart svg
+       * The `d3SVGChart` provides access to the chart svg
        *
-       * @property chartContainer
+       * @property d3SVGChart
        * @type svg object
        */
-      chartContainer: null,
+       d3SVGChart: null,
 
       ready: function() {
-        this.chartContainer = d3.select(this.$.chart);
+        this.log("READY!");
+        this.style.height = this.height + "px";
+        this.d3SVGChart = d3.select(this.$.chart);
       },
 
       /**
@@ -170,12 +164,37 @@ the other bc-d3 graphs.
        * @return {Object} Returns undefined.
        */
       drawCenterLine: function() {
-        this.chartContainer.append("svg:line")
+        if(this.centerline) {
+        this.d3SVGChart.append("svg:line")
           .attr("class", "centerline")
-          .attr("x1", this.width / 2)
+          .attr("x1", (this.width - this.yAxisWidth) / 2 + this.yAxisWidth)
           .attr("y1", 0)
-          .attr("x2", this.width / 2)
+          .attr("x2", (this.width - this.yAxisWidth) / 2 + this.yAxisWidth)
           .attr("y2", this.height);
+        }
+      },
+
+      /**
+       * The `updateCenterLine` method adds a line down the middle of the chart.
+       *
+       * @method updateCenterLine
+       * @return {Object} Returns undefined.
+       */
+      updateCenterLine: function() {
+        if(this.centerline) {
+          this.clearCenterLine();
+          this.drawCenterLine();
+        }
+      },
+
+      /**
+       * The `clearCenterLine` method removes the centerline from the chart.
+       *
+       * @method clearCenterLine
+       * @return {Object} Returns undefined.
+       */
+      clearCenterLine: function() {
+        this.d3SVGChart.selectAll(".centerline").remove();
       },
 
       /**
@@ -196,7 +215,7 @@ the other bc-d3 graphs.
 
       /**
        * The `getYDomain` establishes the y-domain of the data from the data
-       * itself, only if the domain attribute is undefined
+       * itself
        *
        * @method getYDomain
        * @return {Object} Returns undefined.
@@ -228,7 +247,7 @@ the other bc-d3 graphs.
        */
       updateXScale: function() {
         this.xScale = d3.time.scale()
-          .range([this.yAxisWidth, this.width-5])
+          .range([this.yAxisWidth, this.width])
           .domain(this.getXDomain());
       },
 
@@ -240,7 +259,7 @@ the other bc-d3 graphs.
        */
       updateYScale: function() {
         this.yScale = d3.scale.linear()
-          .range([this.height - this.paddingBottom,0 + this.paddingTop])
+          .range([this.height - this.paddingBottom - this.xAxisWidth,0 + this.paddingTop])
           .domain(this.getYDomain());
       },
 
@@ -266,7 +285,38 @@ the other bc-d3 graphs.
         this.log("data changed!");
         this.log(this.data);
         this.clearGraph();
+        // this.updateScales(); you should use this in your children
         this.createGraph();
+      },
+
+      /**
+       * The `log` method is a handy logging tool for debugging elements.
+       * all elements can keep log() methods that will only run when debugging.
+       *
+       * @method log
+       * @return prints to the console (if it exists)
+       * @logTxt {String} the string to be sent to the console
+       */
+      log: function(logTxt) {
+        // A quick console.log tool
+        if (this.debug && typeof console == "object") {
+          console.log("[" + this.tagName + "] " + logTxt);
+        }
+      },
+
+      /**
+       * The `centerlineChanged` observes the centerline attribute and redraws
+       *
+       * @method centerlineChanged
+       * @return {Object} Returns undefined.
+       */
+      centerlineChanged: function() {
+        if(this.centerline) {
+          this.updateGraph();
+        }
+        else {
+          this.clearCenterLine();
+        }
       },
 
       /**
@@ -279,7 +329,7 @@ the other bc-d3 graphs.
         this.log("WIDTH CHANGED:" + this.width);
         this.updateGraph();
         if(this.centerline) {
-          this.chartContainer.selectAll(".centerline")
+          this.d3SVGChart.selectAll(".centerline")
             .attr("x1", this.width / 2)
             .attr("x2", this.width / 2);
         }
@@ -293,9 +343,10 @@ the other bc-d3 graphs.
        */
       heightChanged: function() {
         this.log("HEIGHT CHANGED: " + this.height);
+        this.style.height = this.height + "px";
         this.updateGraph();
         if(this.centerline) {
-          this.chartContainer.selectAll(".centerline")
+          this.d3SVGChart.selectAll(".centerline")
             .attr("y2", this.height);
         }
       },
@@ -311,9 +362,6 @@ the other bc-d3 graphs.
         this.log(this.domain);
         this.updateGraph();
       }
-
     });
-
   </script>
-
 </polymer-element>

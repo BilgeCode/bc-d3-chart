@@ -1,12 +1,11 @@
-bc-d3-chart
-================
+# bc-d3-chart
 
-Extends [bc-d3-base](http://github.com/bilgecode/bc-d3-base)
+See the [component page](http://jamstooks.github.io/bc-d3-chart) for more information.
 
-The base component for some d3.js polymer components:
-
-[bc-d3-datebrush](http://bilgecode.github.io/bc-d3-datebrush)
+## Components that use bc-d3-chart
 
 [bc-d3-areachart](http://bilgecode.github.io/bc-d3-areachart)
+
+[bc-d3-datebrush](http://bilgecode.github.io/bc-d3-datebrush)
 
 [bc-d3-dateline](http://bilgecode.github.io/bc-d3-dateline)
