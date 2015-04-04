@@ -1,6 +1,6 @@
 # bc-d3-chart
 
-See the [component page](http://jamstooks.github.io/bc-d3-chart) for more information.
+See the [component page](http://bilgecode.github.io/bc-d3-chart) for more information.
 
 ## Components that use bc-d3-chart
 
