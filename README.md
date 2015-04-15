@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/BilgeCode/bc-d3-chart.svg?branch=master)](https://travis-ci.org/BilgeCode/bc-d3-chart)
+[![Code Climate](https://codeclimate.com/github/BilgeCode/bc-d3-chart/badges/gpa.svg)](https://codeclimate.com/github/BilgeCode/bc-d3-chart)
 
 # bc-d3-chart
 
