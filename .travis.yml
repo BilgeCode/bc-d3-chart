@@ -4,6 +4,7 @@ node_js:
 
 before_script:
   - npm install -g web-component-tester
+  - npm install -g web-component-tester-istanbul
   - npm install -g bower
   - bower install
   - export DISPLAY=:99.0
